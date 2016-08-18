@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 在全局级别设置国际化资源文件的基名 -->
+	<constant name="struts.custom.i18n.resources" value="surveyI18N"/>
+    <constant name="struts.devMode" value="true" />
+
+    <constant name="struts.ui.theme" value="simple"/>
+    
+    <!-- 处理后台管理员用户请求的名称空间 -->
+    <package name="adminPackage" namespace="/Admin" extends="basePackage">
+    	
+    	<action name="FindAction_*" class="findAction" method="{1}">
+    		<result name="toFindPage"></result>
+    	</action>
+    	
+    	<action name="LogAction" class="logAction" method="showLogs">
+    		<result name="toShowLogs">/adminPages/show_logs.jsp</result>
+    	</action>
+                      
+   		<action name="AdminAction_*" class="adminAction" method="{1}">
+   			<result name="toAllocateRolePage">/adminPages/allocate_roles.jsp</result>
+			<result name="toAdminLoginPage" >/adminPages/admin_login.jsp</result>
+			<result name="showAllSurvey" type="redirectAction">
+				ExcelAction_showAllSurvey
+			</result>
+			<result name="toShowListAction" type="redirectAction">AdminAction_showAdminList</result>
+			<result name="toShowAdminPage">/adminPages/show_admin.jsp</result>
+			<result name="toNewAdminsPage">/adminPages/show_newAdmin_list.jsp</result>
+		</action>
+    
+    
+    	<action name="RoleAction_*" class="roleAction" method="{1}">
+    		<result name="toAllocateAuthPage">/adminPages/allocate_authorities.jsp</result>
+			<result name="toShowRolePage">/adminPages/show_roles.jsp</result>
+			<result name="toShowListAction" type="redirectAction">RoleAction_showRoleList</result>
+			<result name="toSavePage">/adminPages/create_role.jsp</result>
+		</action>
+    
+    
+    	<action name="AuthorityAction_*" class="authorityAction" method="{1}">
+    		<result name="toAllocatePage" type="dispatcher">/adminPages/allocate_resource.jsp</result>
+    		<result name="toCreateAuthorityPage">/adminPages/create_Authority.jsp</result>
+    		<result name="toShowListAction" type="redirectAction">AuthorityAction_authorityList</result>
+    		<result name="toShowAuthoritiesPage">/adminPages/show_authorities.jsp</result>
+		</action>
+    
+    	<action name="ResourceAction_*" class="resourceAction" method="{1}">
+			<result name="toShowAllResPage">/adminPages/show_resource.jsp</result>
+			<result name="updateSuccess" type="json">
+				<param name="root">message</param>
+			</result>
+			<result name="deleteSuccess" type="redirectAction">ResourceAction_showAllResources</result>
+		</action>
+		
+		
+		
+		<action name="ExcelAction_*" class="excelAction" method="{1}">
+			<result name="toExcelListPage" >/adminPages/excel_list.jsp</result>
+			<result name="exportExcel" type="stream">
+    			<param name="contentDisposition">attachment;filename=${fileName}</param>
+    			<param name="contentType">application/vnd.ms-excel</param>
+    		</result>
+    		
+		</action>
+		
+    </package>
+
+	<!-- 处理前台普通用户请求的名称空间 -->
+    <package name="guestPackage" namespace="/Guest" extends="basePackage">
+    	
+    	<!-- ToPageAction_user_myCenter -->
+    	<action name="ToPageAction_*">
+    		<!-- /guestPages/user_myCenter.jsp -->
+    		<result>/guestPages/{1}.jsp</result>
+    	</action>
+    	
+    	<action name="StatisticsAction_*" class="statisticsAction" method="{1}">
+    		<result name="toSummaryPage">/guestPages/survey_summary.jsp</result>
+    			<result name="toChartResult" type="chart">
+    			<param name="width">${width}</param>
+    			<param name="height">${height}</param>
+    		</result>
+    		<result name="toTextPage">/guestPages/statistics_text.jsp</result>
+    		<result name="toMatrixNomalPage">/guestPages/statistics_normalMatrix.jsp</result>
+    		<result name="toMatrixOptionPage">/guestPages/statistics_optionMatrix.jsp</result>
+    	</action>
+    	
+    	<!-- EngageAction配置 -->
+    	<action name="EngageAction_*" class="engageAction" method="{1}">
+    		<result name="toIndexAction" type="redirectAction">SurveyAction_toIndexAction</result>
+    		<result name="toEngageSurvey">/guestPages/engage_engage.jsp</result>
+    	</action>
+    	
+    	<!-- QuestionAction配置 -->
+    	<action name="QuestionAction_*" class="questionAction" method="{1}">
+    		<result name="toChoosenType">/guestPages/question_choosenType.jsp</result>
+    		<result name="toQuestionDesign">/guestPages/question_design.jsp</result>
+    	</action>
+    	
+    	<!-- BagAction配置 -->
+    	<action name="BagAction_*" class="bagAction" method="{1}">
+    		<!-- 在xml文件中也可以传递参数，使用ognl表达式， ${},在里面写传递参数的属性 -->
+    		<result name="toEditBag">/guestPages/bag_edit.jsp</result>
+    		<result name="toMovePage">/guestPages/bag_move.jsp?bagId=${bagId}</result>
+    	</action>
+    	<!-- SurveyAction配置 -->
+    	<action name="SurveyAction_*" class="surveyAction" method="{1}">
+    		<!-- 暂时前往临时页面 -->
+    		<result name="toMyUncompletedAction" type="redirectAction">SurveyAction_myUncompletedSurvey</result>
+    		<result name="input">${input}</result>
+    		<result name="toUncompletedListPage">/guestPages/survey_uncompletedListPage.jsp</result>
+    		<result name="toCompletedListPage">/guestPages/survey_completedListPage.jsp</result>
+    		<result name="toEditSurvey">/guestPages/survey_edit.jsp</result>
+    		<result name="toDesignPage">/guestPages/survey_design.jsp</result>
+    		<result name="toCompletedPage">/guestPages/survey_completed.jsp</result>
+    		<result name="toBagOrderPage">/guestPages/survey_adjustBagOrder.jsp</result>
+    		<result name="toAllAvailableSurveyPage">/guestPages/survey_allAvailableSurvey.jsp</result>
+			<result name="toMyEngagedSurvey">/guestPages/user_myEngagedList.jsp</result>
+    	</action>
+		
+		<action name="UserAction_*" class="userAction" method="{1}">
+			<result name="registSuccess">/guestPages/user_login.jsp</result>
+			<result name="registError">/guestPages/user_regist.jsp</result>
+			<!-- <result name="loginError">/guestPages/user_login.jsp</result> -->
+			<result name="toPayPage">/guestPages/user_pay.jsp</result>
+			<result name="loginSuccess">/index.jsp</result>
+			<result name="logoutSuccess">/index.jsp</result>
+			<result name="toMyCenterPage">/guestPages/user_myCenter.jsp</result>
+			
+		</action>
+		
+    </package>
+    
+    <!-- ==============================basePackage供其他类进行继承用=================  -->
+    
+     <package name="basePackage" namespace="/" extends="jfreechart-default,json-default">
+     	<interceptors>
+	    	<!-- 注册自定义拦截器类 -->
+    		<interceptor name="loginInterceptor" class="com.atguigu.survey.guest.component.interceptor.LoginInterceptor"/>
+    		<interceptor name="resourceInteceptor" class="com.atguigu.survey.admin.component.intecept.ResourceInteceptor"></interceptor>
+    		<interceptor name="userInterceptor" class="com.atguigu.survey.admin.component.intecept.UserInterceptor"></interceptor>
+    		<interceptor name="authorityInteceptor" class="com.atguigu.survey.admin.component.intecept.AuthorityInteceptor"></interceptor>
+    		<interceptor-stack name="myStack">
+    			<!-- 引用自定义拦截器 -->
+    			<!-- <interceptor-ref name="loginInterceptor"/> -->
+    			<interceptor-ref name="resourceInteceptor"></interceptor-ref>
+    			<interceptor-ref name="userInterceptor"></interceptor-ref>
+    			<interceptor-ref name="authorityInteceptor"></interceptor-ref>
+    			<!-- 引用Struts2拦截器 -->
+    			<interceptor-ref name="paramsPrepareParamsStack">
+    				<!-- 修改某个拦截器参数 -->
+    				<!-- 设置prepare拦截器不要执行prepare()方法 -->
+    				<param name="prepare.alwaysInvokePrepare">false</param>
+    				
+    				<!-- 设置上传时单个文件大小限制 -->
+    				<param name="fileUpload.maximumSize">500000</param>
+    				
+    				<!-- 设置上传时文件格式限制 -->
+    				<param name="fileUpload.allowedTypes">image/jpeg,image/gif,image/png</param>
+    			</interceptor-ref>
+    		</interceptor-stack>
+    	</interceptors>
+    	
+    	<!-- 引用当前自定义拦截器栈 -->
+    	<default-interceptor-ref name="myStack"/>
+    	
+	 	<!-- 设定全局result -->
+	 	<global-results>
+	 		<!-- 在任何一个Action中发现未登陆问题，都可以执行这个result -->
+	 		<result name="loginError">/guestPages/user_login.jsp</result>
+	 		<result name="toSurveyDesign" type="redirectAction">
+	 			SurveyAction_design?surveyId=${surveyId}
+	 		</result>
+			<result name="toVipPage">/guestPages/user_vip.jsp</result>
+	 		<result name="toGlobalMess">/global_mess.jsp</result>
+    		<result name="toIndexPage">/guestPages/index.jsp</result>
+			<result name="adminLoginSuccess">/adminPages/login_success.jsp</result>              
+	 	</global-results>
+    
+    	<global-exception-mappings>
+    		<exception-mapping result="toGlobalMess" exception="com.atguigu.survey.guest.entity.BagSetNotNullException"></exception-mapping>
+    		<exception-mapping result="toGlobalMess" exception="com.atguigu.survey.guest.entity.QuestionSetNotNullException"></exception-mapping>
+    	</global-exception-mappings>
+     </package>
+	
+
+</struts>

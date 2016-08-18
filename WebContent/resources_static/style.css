@@ -1,0 +1,212 @@
+@CHARSET "UTF-8";
+/*=======================================================================样式声明区*/
+.textAlignCenter {
+	text-align: center;
+}
+
+.multiLineTextInput {
+	border: 1px solid black;
+	width: 300px;
+	height: 100px;
+}
+
+.shortInput {
+	width: 20px;
+	border: 1px solid black;
+}
+
+.longInput {
+	width: 200px;
+	border: 1px solid black;
+}
+
+.block-div {
+	border: 1px solid black;
+	padding:10px;
+    -moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */
+    margin: 10px 0px 10px 0px;
+}
+
+.small-block-div {
+	border: 1px solid black;
+    -moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */
+}
+
+/* img {
+	border: 1px solid black;
+    -moz-border-radius: 5px;      Gecko browsers
+    -webkit-border-radius: 5px;   Webkit browsers
+    border-radius:5px;            W3C syntax
+} */
+
+#headTitle {
+	text-align: center;
+	font-size: 50px;
+}
+
+body {
+	width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	font-family: Consolas,微软雅黑;
+	
+	border: 1px solid black;
+	padding:10px;
+    -moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */
+}
+
+.floatRight {
+	float: right;
+}
+
+.top10Block {
+	width: 586px;
+	height: 400px;
+	display:inline-block;
+	border: 1px solid black;
+    -moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */
+    padding: 5px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    word-break:keep-all;
+    white-space:nowrap;
+}
+
+.invisibleTable,.invisibleTable td {
+	padding: 0px;
+	margin: 0px;
+}
+
+.dashedTable {
+	width: 100%;
+}
+
+.dashedTable,.dashedTable td {
+	padding: 0px 0px 0px 5px;
+	margin: 0px;
+	border-style: dashed;
+	border-width: 1px;
+	border-color: #FFB6C1;
+	
+	-moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */
+}
+
+.rightSpan {
+	display: inline-block;
+	width: 50%;
+	text-align: right;
+}
+
+.leftSpan {
+	display: inline-block;
+	width: 45%;
+	text-align: left;
+}
+
+li {
+	list-style-image: url("duigou.png");
+}
+
+.navigatorDiv {
+	padding: 0px;
+}
+
+.locationDiv {
+	padding: 0px 0px 0px 5px;
+	margin: 0px;
+	display: inline-block;
+	width: 49%;
+}
+
+.backToIndexDiv {
+	padding: 0px;
+	margin: 0px;
+	display: inline-block;
+	width: 49%;
+	text-align: right;
+}
+
+.leftTd {
+	width: 30%;
+}
+
+.centerTd {
+	width: 10%;
+}
+
+a {
+	text-decoration: none;
+	color: blue;
+}
+
+a:HOVER {
+	color: red;
+}
+
+a:ACTIVE {
+	color: yellow;
+}
+
+.formTable {
+	width: 800px;
+	margin: 50px auto 50px auto;
+	border: 1px solid black;
+	-moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */
+    padding: 10px;
+}
+
+.formTable td {
+	border: 1px solid black;
+	-moz-border-radius: 5px;      /* Gecko browsers */
+    -webkit-border-radius: 5px;   /* Webkit browsers */
+    border-radius:5px;            /* W3C syntax */
+    padding: 15px;
+    text-align: center;
+}
+
+/*=======================================================================样式定制区*/
+#guestInfoBlock {
+	border: none;
+	width: 100%;
+	text-align: right;
+}
+
+#guestInfoContent {
+	display: inline-block;
+	border: 1px solid black;
+    -moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */
+    width: 800px;
+    text-align: center;
+}
+
+#goPageDiv {
+	text-align: center;
+}
+
+#bottom {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#hotWords {
+	color: red;
+	font-size: 20px;
+	font-style: italic;
+	font-weight: bold;
+}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<context:component-scan base-package="com.atguigu.survey.*.component.*"/>
+	
+	<!--  1.引入外部属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<!-- 2.配置数据源，为创建sessionFactory做准备 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${jdbc.user}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+	</bean>
+	
+	<!-- 3.配置SessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 装配数据源 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 指定Hibernate配置文件的位置 ，在此类中虽然没有configLocation属性但是提供的get、set方法中有！ -->
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+		<!-- 指定hbm映射文件的位置 -->
+		<property name="mappingLocations" value="classpath:com/atguigu/survey/*/entity/*.hbm.xml"/>
+	</bean>
+	
+	<!-- 4.配置Hibernate事务管理器 -->
+	<bean id="hibernateTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<!-- 装配SessionFactory -->
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	 <bean id="logInitListener" 
+	 	   class="com.atguigu.survey.admin.component.listenner.LogInitListener"
+	 	   autowire="byType">
+	 	   
+	 </bean>
+	<!-- 配置切面类实体类 -->
+	<bean id="logAspect" class="com.atguigu.survey.advisor.LogAspect" autowire="byType"></bean>
+	
+	<!-- <aop:config>
+		在AOP中配置日志切面
+		<aop:aspect ref="logAspect">
+			AOP是标注在类上的， 所以其下面还需要配置， 切入点表达式 和通知类型
+			声明切入点表达式，访问权限修饰符和方法类型可以用一个*
+			<aop:pointcut id="logPointCut"
+						  expression="(execution(* *..*Service.*save*(..)) || 
+										  execution(* *..*Service.*update*(..)) || 
+										  execution(* *..*Service.*delete*(..)) || 
+										  execution(* *..*Service.*remove*(..)) || 
+										  execution(* *..*Service.*copy*(..)) || 
+										  execution(* *..*Service.*move*(..)) || 
+										  execution(* *..*Service.calculate*(..))) and !bean(logServiceImpl)" />
+			给record方法添加切入点表达式和通知类型
+			<aop:around pointcut-ref="logPointCut"  method="record"/>
+		</aop:aspect>
+	</aop:config> -->
+	
+	<!-- 配置石英任务 -->
+	<!-- 1.把石英类加入到IOC容器中，首先要导包 -->
+	<bean id="jobDetailBean" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- 石英时， 指定要做的工作：需要每个月的15号 ，创建下三个月用到的数据库表  -->
+		<property name="jobClass"
+				  value="com.atguigu.survey.admin.scheduler.LogScheduler" />
+		<!-- 工作类中需要用到的参数map： 其中需要logService用来创建log_xxx表 -->
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="logService" value="logServiceImpl"/>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- 2.配置石英类触发器， 在什么情况下执行jobDetailBean ,cron : 时间的单位，等于百万年 -->
+	<bean id="cronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobDetailBean"/>
+		<!-- 配置触发时间 -->
+		<!-- 应配置为：0 0 0 15 * ?  测试的配置：0 8 11 1 * ? -->
+		<property name="cronExpression" value="0 8 11 1 * ?"/>
+	</bean>
+	
+	<!-- 配置启动石英任务的工厂bean -->
+	<bean id="factoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTriggerBean"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!--
+		spring监听器， 为什么不配置到web.xml中呢？ 
+			①.配置在spring之前，ioc容器还没有创建， 无法添加到ioc中管理
+			②.配置在spring之后，无法再ioc启动时创建表
+	 -->
+	
+		
+	<!-- 5.开启基于注解的声明式事务 -->
+	<tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
+
+</beans>

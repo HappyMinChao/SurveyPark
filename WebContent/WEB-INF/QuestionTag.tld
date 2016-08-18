@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd ">
+  
+  <description>Survey项目中显示问题详情</description>
+  <display-name>Survey core</display-name>
+  <tlib-version>1.0</tlib-version>
+  <!-- 此标签库前缀，在页面中通过前缀使用标签库 -->
+  <short-name>atguigu</short-name>
+  <!-- 引用此标签库的url -->
+  <uri>http://www.atguigu.com/survey</uri>
+  
+  <tag>
+  	<description>根据栈顶的Question对象生成问题细节</description>
+  	<name>generateQuestion</name>
+  	<tag-class>com.atguigu.survey.guest.tag.QuestionTag</tag-class>
+  	<body-content>empty</body-content>
+  	<attribute>
+  		<description>以OGNL表达式的形式传入当前包裹的id值</description>
+  		<name>currentBagIdOGNL</name>
+  		<required>true</required>
+  		<!-- 是否自动解析EL表达式 -->
+  		<rtexprvalue>false</rtexprvalue>
+  	</attribute>
+  </tag>
+</taglib>

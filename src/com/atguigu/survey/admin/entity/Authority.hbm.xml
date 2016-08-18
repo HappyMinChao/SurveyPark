@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-2-28 9:13:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping package="com.atguigu.survey.admin.entity">
+    <class name="Authority" table="AUTHORITYS">
+        <id name="authorityId" type="java.lang.Integer">
+            <column name="AUTHORITY_ID" />
+            <generator class="native" />
+        </id>
+        <property name="authorityName" type="java.lang.String">
+            <column name="AUTHORITY_NAME" />
+        </property>
+        <set name="resourceSet" table="AUTH_RES_INNER" fetch="join">
+            <key>
+                <column name="AUTHORITY_ID" />
+            </key>
+            <many-to-many class="Resource"  column="RESOURCE_ID"/>
+        </set>
+    </class>
+</hibernate-mapping>
